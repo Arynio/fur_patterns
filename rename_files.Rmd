@@ -1,0 +1,59 @@
+---
+title: "rename_pictures"
+author: "Dani"
+date: "12 de febrero de 2018"
+output: html_document
+---
+
+
+#0: Define paths.
+
+```{r Define paths, eval=FALSE, engine='bash'}
+
+T_PATH=/Users/Dani/ownCloud/publico/fur_patterns/fotos/toy #toy path
+D_PATH=/Users/Dani/ownCloud/publico/fur_patterns/fotos/acebuche_raw #acebuche raw pictures path
+
+```
+
+#1: Rename files.
+
+```{r Rename files, eval=FALSE, engine='bash'}
+
+#The following loop deletes dots from the filenames and replaces whitespaces with underscores:
+cd $D_PATH
+declare INDIVIDUALS=$(ls -rth | sort | uniq)
+SAVEIFS=$IFS #saves default configuration of field separators in loop
+IFS=$(echo -en "\n\b") #modifies configuration of field separators in loop so that filenames are not split at whitespaces
+for i in ${INDIVIDUALS[@]}
+  do
+  echo "${i}"
+  mv ${i} ${i//\./}
+  done
+declare INDIVIDUALS=$(ls -rth | sort | uniq)
+for i in ${INDIVIDUALS[@]}
+  do
+  echo "${i}"
+  mv ${i} ${i// /_}
+  done
+IFS=$SAVEIFS #restores default configuration of field separators in loop
+
+
+#The following loop renames all .dng files so that they reflect their folder name:
+cd $D_PATH
+declare INDIVIDUALS=$(ls -rth | sort | uniq)
+for i in ${INDIVIDUALS[@]}
+  do
+  echo "${i}"
+  cd $D_PATH/"${i}"
+  declare RAW=$(ls -rth *.dng | sort | uniq)
+  COUNTER=0
+  for j in ${RAW[@]}
+    do
+    COUNTER=$((COUNTER + 1))
+    echo $COUNTER
+    echo "${j}"
+    mv "${j}" "${i}"_$COUNTER.dng
+    done
+  done
+
+```
