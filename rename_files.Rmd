@@ -21,7 +21,8 @@ D_PATH=/Users/Dani/ownCloud/publico/fur_patterns/fotos/acebuche_raw #acebuche ra
 
 #The following loop deletes dots from the filenames and replaces whitespaces with underscores:
 cd $D_PATH
-declare INDIVIDUALS=$(ls -rth | sort | uniq)
+shopt -s extglob #the extglob shell option gives you more powerful pattern matching in the command line
+declare INDIVIDUALS=$(ls -rth | sort | uniq) #selects all folders except for the calibration one
 SAVEIFS=$IFS #saves default configuration of field separators in loop
 IFS=$(echo -en "\n\b") #modifies configuration of field separators in loop so that filenames are not split at whitespaces
 for i in ${INDIVIDUALS[@]}
@@ -40,7 +41,7 @@ IFS=$SAVEIFS #restores default configuration of field separators in loop
 
 #The following loop renames all .dng files so that they reflect their folder name:
 cd $D_PATH
-declare INDIVIDUALS=$(ls -rth | sort | uniq)
+declare INDIVIDUALS=$(ls -rth | grep -v 'Calibrado_basculas' | sort | uniq)
 for i in ${INDIVIDUALS[@]}
   do
   echo "${i}"
