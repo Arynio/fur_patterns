@@ -10,8 +10,8 @@ output: html_document
 
 ```{r Define paths, eval=FALSE, engine='bash'}
 
-T_PATH=/Users/Dani/ownCloud/publico/fur_patterns/fotos/toy #toy path
-D_PATH=/Users/Dani/ownCloud/publico/fur_patterns/fotos/acebuche_raw #acebuche raw pictures path
+T_PATH=/Users/Dani/ownCloud/publico/fur_patterns/fotos_pelaje_cautividad/toy/ #toy path
+D_PATH=/Users/Dani/ownCloud/publico/fur_patterns/fotos_pelaje_cautividad/Acebuche/acebuche_raw/ #acebuche raw pictures path
 
 ```
 
@@ -19,10 +19,10 @@ D_PATH=/Users/Dani/ownCloud/publico/fur_patterns/fotos/acebuche_raw #acebuche ra
 
 ```{r Rename files, eval=FALSE, engine='bash'}
 
-#The following loop deletes dots from the filenames and replaces whitespaces with underscores:
+#The following loop deletes dots from the foldernames and replaces whitespaces with underscores:
 cd $D_PATH
 shopt -s extglob #the extglob shell option gives you more powerful pattern matching in the command line
-declare INDIVIDUALS=$(ls -rth | sort | uniq) #selects all folders except for the calibration one
+declare INDIVIDUALS=$(ls -rth | grep -v 'Calibrado_basculas' | sort | uniq) #selects all folders except for the calibration one
 SAVEIFS=$IFS #saves default configuration of field separators in loop
 IFS=$(echo -en "\n\b") #modifies configuration of field separators in loop so that filenames are not split at whitespaces
 for i in ${INDIVIDUALS[@]}
@@ -30,7 +30,7 @@ for i in ${INDIVIDUALS[@]}
   echo "${i}"
   mv ${i} ${i//\./}
   done
-declare INDIVIDUALS=$(ls -rth | sort | uniq)
+declare INDIVIDUALS=$(ls -rth | grep -v 'Calibrado_basculas' | sort | uniq)
 for i in ${INDIVIDUALS[@]}
   do
   echo "${i}"
