@@ -1,0 +1,57 @@
+---
+title: "summary_dataframe"
+author: "Dani"
+date: "12 de marzo de 2018"
+output: html_document
+---
+
+#Define paths:
+O_PATH <- file.path("/Users/Dani/ownCloud/publico/fur_patterns/datos/") #output path
+S_PATH <- file.path("/Users/Dani/ownCloud/publico/fur_patterns/datos/resultados_12_linces/") #SpotEgg analyses output path
+P_PATH <- file.path("/Users/Dani/Dropbox/tablas_lince/lynxpardinus/Ex_situ/") #pedigree path
+setwd(P_PATH)
+
+#0: Define paths.
+
+```{r Define paths, eval=FALSE}
+
+
+
+```
+
+#1: Generate dataframe.
+
+```{r Generate dataframe, eval=FALSE}
+
+#Define paths:
+O_PATH <- file.path("/Users/Dani/ownCloud/publico/fur_patterns/datos/") #output path
+S_PATH <- file.path("/Users/Dani/ownCloud/publico/fur_patterns/datos/resultados_12_linces/") #SpotEgg analyses output path
+P_PATH <- file.path("/Users/Dani/Dropbox/tablas_lince/lynxpardinus/Ex_situ/") #pedigree path
+
+#Load libraries:
+library(readr)
+library(dplyr)
+a_priori_info <- data_frame("studbook_id"=c(3,12,17,47,90,100,115,168,169,196,197,226))
+
+
+
+
+exchange_odd <- read_csv2("script_input_EXCHANGE_180308.CSV", col_names=T)[-c(1),][c(T,F),]
+exchange_odd
+
+even_col_names <- unlist(read_csv2("script_input_EXCHANGE_180308.CSV")[c(1),c(1:7)],use.names=F)
+even_col_names
+
+exchange_even <- read_csv2("script_input_EXCHANGE_180308.CSV", col_names=even_col_names)[-c(1:2),][c(F,T),]
+exchange_even
+
+exchange0 <- left_join(exchange_odd, exchange_even, by=c("ID:ID"="MOVE:ID"))
+exchange0
+exchange0$`ID:ID` <- as.numeric(exchange0$`ID:ID`)
+
+
+
+
+a_priori_info <- data_frame("studbook_id"=numeric(0),"name"=character(0),"sire_id"=numeric(0),"dame_id"=numeric(0),"ancestry"=character(0),"location"=character(0),"birth_date"=numeric(0),"picture_date"=numeric(0),"age"=numeric(0),"picture_order"=numeric(0),"flank"=character(0),"a_priori_pattern"=character(0))
+
+```
