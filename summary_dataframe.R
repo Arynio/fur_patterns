@@ -83,37 +83,35 @@ picture_dataframe
 picture_dataframe$picture_date <- paste0(substr(picture_dataframe$picture_date,5,6),substr(picture_dataframe$picture_date,3,4),substr(picture_dataframe$picture_date,1,2))
 picture_dataframe
 
-#Load SpotEgg outputs and extract valuable information from there:
-setwd(paste0(O_PATH,"resultados_12_linces/"))
-resultados_12_linces <- list.files(getwd(), recursive=T)
-resultados_12_linces[grep("ALL_EGG_FEATURES_REPORT.csv",resultados_12_linces)]
-spotegg_list <- list()
-for (i in 1:length(resultados_12_linces[grep("ALL_EGG_FEATURES_REPORT.csv",resultados_12_linces)])) {
-  spotegg_all_features <- read.csv2(paste0(getwd(),"/",resultados_12_linces[grep("ALL_EGG_FEATURES_REPORT.csv",resultados_12_linces)][i]))
-  spotegg_list[[i]] <- spotegg_all_features
-}
-spotegg_joined <- rbind(as.data.frame(spotegg_list[[1]],stringsAsFactors=FALSE),as.data.frame(spotegg_list[[2]],stringsAsFactors=FALSE),as.data.frame(spotegg_list[[3]],stringsAsFactors=FALSE),stringsAsFactors=FALSE)
-spotegg_dataframe <- spotegg_joined %>% select(FileName,EGG_ID,Area,NumSpots,TotAreaSpots,AvgSpotSize,AvgExcentricity,FractalDim,Per_vs_Area)
-spotegg_dataframe$FileName <- as.character(spotegg_dataframe$FileName)
-spotegg_dataframe <- spotegg_dataframe %>% mutate(Name=gsub("^(.*?)_.*", "\\1", spotegg_dataframe$FileName),Picture_date=gsub("^[^_]*_([^_]+)_.*", "\\1", spotegg_dataframe$FileName),
-                                                  Picture_order=gsub("(.*_){2}(\\d+)_.+", "\\2", spotegg_dataframe$FileName),Picture_flank=gsub("^(?:[^_]*_){3}([^_]*)_(.+)$", "\\1", spotegg_dataframe$FileName),
-                                                  Pattern_a_priori=gsub(".dng","",gsub("^(?:[^_]*_){4}", "\\1", spotegg_dataframe$FileName)))
-pictures_path <- list.files(F_PATH, recursive=T)[grep(paste(spotegg_dataframe$Name,collapse="|"),basename(list.files(F_PATH, recursive=T)))]
-pictures_location <- numeric(0)
-for (i in 1:nrow(spotegg_dataframe)) {
-  extract_location <- toupper(strsplit(pictures_path[grepl(gsub("_[^_]*$","\\1",spotegg_dataframe[i,1]),pictures_path)],"_")[[1]][1])
-  pictures_location <- c(pictures_location,extract_location)
-}
-spotegg_dataframe$Pictures_location <- pictures_location
-spotegg_dataframe$Picture_date <- paste0("20",substr(spotegg_dataframe$Picture_date,5,6),substr(spotegg_dataframe$Picture_date,3,4),substr(spotegg_dataframe$Picture_date,1,2))
-spotegg_dataframe
+# #Load SpotEgg outputs and extract valuable information from there:
+# setwd(paste0(O_PATH,"resultados_12_linces/"))
+# resultados_12_linces <- list.files(getwd(), recursive=T)
+# resultados_12_linces[grep("ALL_EGG_FEATURES_REPORT.csv",resultados_12_linces)]
+# spotegg_list <- list()
+# for (i in 1:length(resultados_12_linces[grep("ALL_EGG_FEATURES_REPORT.csv",resultados_12_linces)])) {
+#   spotegg_all_features <- read.csv2(paste0(getwd(),"/",resultados_12_linces[grep("ALL_EGG_FEATURES_REPORT.csv",resultados_12_linces)][i]))
+#   spotegg_list[[i]] <- spotegg_all_features
+# }
+# spotegg_joined <- rbind(as.data.frame(spotegg_list[[1]],stringsAsFactors=FALSE),as.data.frame(spotegg_list[[2]],stringsAsFactors=FALSE),as.data.frame(spotegg_list[[3]],stringsAsFactors=FALSE),stringsAsFactors=FALSE)
+# spotegg_dataframe <- spotegg_joined %>% select(FileName,EGG_ID,Area,NumSpots,TotAreaSpots,AvgSpotSize,AvgExcentricity,FractalDim,Per_vs_Area)
+# spotegg_dataframe$FileName <- as.character(spotegg_dataframe$FileName)
+# spotegg_dataframe <- spotegg_dataframe %>% mutate(Name=gsub("^(.*?)_.*", "\\1", spotegg_dataframe$FileName),Picture_date=gsub("^[^_]*_([^_]+)_.*", "\\1", spotegg_dataframe$FileName),
+#                                                   Picture_order=gsub("(.*_){2}(\\d+)_.+", "\\2", spotegg_dataframe$FileName),Picture_flank=gsub("^(?:[^_]*_){3}([^_]*)_(.+)$", "\\1", spotegg_dataframe$FileName),
+#                                                   Pattern_a_priori=gsub(".dng","",gsub("^(?:[^_]*_){4}", "\\1", spotegg_dataframe$FileName)))
+# pictures_path <- list.files(F_PATH, recursive=T)[grep(paste(spotegg_dataframe$Name,collapse="|"),basename(list.files(F_PATH, recursive=T)))]
+# pictures_location <- numeric(0)
+# for (i in 1:nrow(spotegg_dataframe)) {
+#   extract_location <- toupper(strsplit(pictures_path[grepl(gsub("_[^_]*$","\\1",spotegg_dataframe[i,1]),pictures_path)],"_")[[1]][1])
+#   pictures_location <- c(pictures_location,extract_location)
+# }
+# spotegg_dataframe$Pictures_location <- pictures_location
+# spotegg_dataframe$Picture_date <- paste0("20",substr(spotegg_dataframe$Picture_date,5,6),substr(spotegg_dataframe$Picture_date,3,4),substr(spotegg_dataframe$Picture_date,1,2))
+# spotegg_dataframe
 
 #Now the SpotEgg outputs have been combined into a single data frame by Lidia:
 spotegg_dataframe <- read_tsv(paste0(O_PATH,"BASE_DATOS_SPOTEGG_56v2.txt"))
 spotegg_dataframe$FECHA <- paste0(substr(spotegg_dataframe$FECHA,5,6),substr(spotegg_dataframe$FECHA,3,4),substr(spotegg_dataframe$FECHA,1,2))
 spotegg_dataframe
-
-#Load the
 
 #Load the latest general_info to extract ancestry information:
 setwd(G_PATH)
