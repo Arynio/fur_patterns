@@ -123,7 +123,9 @@ complete_dataframe <- left_join(right_join(studbook_dataframe_combined,spotegg_d
 complete_dataframe$FECHA <- as.numeric(complete_dataframe$FECHA)
 complete_dataframe <- complete_dataframe %>% rename(Current_location=Location,Birth_date=DOB,ROI=EGG_ID) %>% mutate(Age=round(round(strptime(FECHA,format="%y%m%d")-strptime(Birth_date,format="%y%m%d"))/365,2)) %>% select(1,2,3,4,5,41,6,7,9,42,c(10:40)) %>% arrange(ID,FECHA)
 print.data.frame(complete_dataframe)
-
+complete_dataframe$FECHA <- as.character(complete_dataframe$FECHA)
+complete_dataframe$Birth_date <- as.character(complete_dataframe$Birth_date)
+complete_dataframe
 write_csv(complete_dataframe,paste0(O_PATH,"complete_dataframe_55_linces.csv"))
 
 
