@@ -1,7 +1,7 @@
 
 library(readr)
 
-full_df <- read_tsv("/Users/Dani/ownCloud/publico/fur_patterns/relatedness_analyses/PMx_relatedness_matrix_v2.txt")[-1,-2]  #read PMx matrix (as data frame) without the extra column
+full_df <- read_tsv("/Users/Dani/ownCloud/publico/fur_patterns/relatedness_analyses/PMx_relatedness_matrix_v3.txt")[-1,-2] #read PMx matrix (as data frame) without the extra column
 full_df
 full_matrix <- as.matrix(full_df[,-1]) #turn the data frame into a matrix and remove the first column with the IDs
 rownames(full_matrix) <- full_df$UniqueID #save the IDs as row names
@@ -16,8 +16,9 @@ a_priori_info
 
 subset_matrix <- full_matrix[unlist(a_priori_info,use.names=F),unlist(a_priori_info,use.names=F)] #filter the matrix with the IDs in order to subset it
 subset_matrix
-subset_matrix_wout_null <- subset_matrix[-which(rowSums(subset_matrix)<1),-which(colSums(subset_matrix)<1)] #remove individuals without data (they will only have r=0.5 with themselves)
-subset_matrix_wout_null
+#subset_matrix_wout_null <- subset_matrix[-which(rowSums(subset_matrix)<1),-which(colSums(subset_matrix)<1)] #remove individuals without data (they will only have r=0.5 with themselves)
+#subset_matrix_wout_null
 
-write.table(subset_matrix_wout_null, file="/Users/Dani/ownCloud/publico/fur_patterns/relatedness_analyses/acebuche_relatedness_w_names.txt", row.names=T, col.names=T)
-write.table(subset_matrix_wout_null, file="/Users/Dani/ownCloud/publico/fur_patterns/relatedness_analyses/acebuche_relatedness_wout_names.txt", row.names=F, col.names=F)
+write.table(subset_matrix, file="/Users/Dani/ownCloud/publico/fur_patterns/relatedness_analyses/acebuche_relatedness_w_names.txt", row.names=T, col.names=T)
+write.table(subset_matrix, file="/Users/Dani/ownCloud/publico/fur_patterns/relatedness_analyses/acebuche_relatedness_wout_names.txt", row.names=F, col.names=F)
+
