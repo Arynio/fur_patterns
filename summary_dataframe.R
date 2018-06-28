@@ -145,7 +145,7 @@ write_csv(complete_dataframe,paste0(O_PATH,"complete_dataframe_55_linces.csv"))
 
 
 #Something else I ran for Simon (ignore):
-
+#Obtain modified lineage with fur phenotypes (yes/no):
 lynx_picture <- sort(c(12,47,10,3,17,72,226,65,57,78,90,100,6,115,131,282,168,185,169,186,196,227,197,224,210,272,270,255,254,244,245,253,243,306,305,287,304,307,366,381,332,358,331,490,398,420,435,419,384,421,431,399))
 length(lynx_picture)
 
@@ -158,6 +158,33 @@ lineage_complete <- lineage %>% mutate(epillepsy_aff=ifelse(EPILLEPSY=="Epilepsi
                                        cryptorchidism_aff=ifelse(CRYPTORCHIDISM=="Criptorquidia",1,ifelse(sex==1 | age>=1,0,NA)),
                                        fur=ifelse(id %in% lynx_picture,1,NA)) %>%
   select(c(1:11,19,20,21,14:18))
-write_csv(lineage_complete,"LINEAGE_280308_modified_with_fur.csv")
+write_csv(lineage_complete,"LINEAGE_180328_modified_with_fur.csv")
+
+#Further modify the lineage to include fur variables obtained with SpotEgg:
+setwd(O_PATH)
+
+lineage_complete_2 <- read_csv2("LINEAGE_180525_modified_with_fur.csv",col_names=T)
+lineage_complete_2
+
+roi_3_dataframe <- complete_dataframe %>% filter(ROI==3)
+roi_3_dataframe <- roi_3_dataframe[-c(as.numeric(grep("cachorro",roi_3_dataframe$Name))),c(1,16,17,19,23,24)]
+roi_3_dataframe
+
+lineage_complete_3 <- left_join(lineage_complete_2,roi_3_dataframe,by=c("id"="ID"))
+write_csv(lineage_complete_3,"LINEAGE_180627_modified_with_fur.csv")
+
+
+#Small unfinished code to subset a table and keep only individuals that are parents:
+table <- data_frame("ID"=c(2,5,17,18,19,23,30),"PID"=c("WILD","WILD",2,"WILD","WILD",19,2950),"MID"=c("WILD","WILD",5,"WILD","WILD",17,17))
+table
+subset_table <- data_frame()
+for (i in 1:nrow(table)) {
+  if (unlist(table[i,2],use.names=F) %in% unlist(table[,1],use.names=F) | unlist(table[i,3],use.names=F) %in% unlist(table[,1],use.names=F)) {
+    print(paste(i,T))
+    subset_row <- table[i,]
+    subset_table <- rbind(subset_table,subset_row)
+  } else { print(paste(i,F)) }
+}
+subset_table
 
 
