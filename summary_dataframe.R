@@ -167,12 +167,22 @@ lineage_complete_2 <- read_csv2("LINEAGE_180525_modified_with_fur.csv",col_names
 lineage_complete_2
 
 roi_3_dataframe <- complete_dataframe %>% filter(ROI==3)
-roi_3_dataframe <- roi_3_dataframe[-c(as.numeric(grep("cachorro",roi_3_dataframe$Name))),c(1,16,17,19,23,24)]
+roi_3_dataframe <- roi_3_dataframe[-c(as.numeric(grep("cachorro",roi_3_dataframe$Name))),c(1,2,16,17,19,23,24)]
 roi_3_dataframe
 
 lineage_complete_3 <- left_join(lineage_complete_2,roi_3_dataframe,by=c("id"="ID"))
 write_csv(lineage_complete_3,"LINEAGE_180627_modified_with_fur.csv")
 
+#Further modify the lineage to include both sides' measurements for the fur variables obtained with SpotEgg:
+setwd(O_PATH)
+roi_3_both_sides <- read_tsv("ambos_lados.txt") %>% filter(EGG_ID==3) %>% select(1,9,10,12,13,18,19,24,25,27,28)
+roi_3_both_sides
+
+roi_3_both_dataframe <- left_join(roi_3_dataframe,roi_3_both_sides,by=c("Name"="NOMBRE")) %>% select(1,2,8,9,3,10,11,4,12,13,5,14,15,6,16,17,7)
+roi_3_both_dataframe
+
+lineage_complete_4 <- left_join(lineage_complete_2,roi_3_both_dataframe[,-2],by=c("id"="ID"))
+write_csv(lineage_complete_4,"LINEAGE_180706_modified_with_fur.csv")
 
 #Small unfinished code to subset a table and keep only individuals that are parents:
 table <- data_frame("ID"=c(2,5,17,18,19,23,30),"PID"=c("WILD","WILD",2,"WILD","WILD",19,2950),"MID"=c("WILD","WILD",5,"WILD","WILD",17,17))
@@ -186,5 +196,3 @@ for (i in 1:nrow(table)) {
   } else { print(paste(i,F)) }
 }
 subset_table
-
-
